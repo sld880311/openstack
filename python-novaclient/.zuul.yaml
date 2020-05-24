@@ -1,0 +1,20 @@
+- job:
+    name: novaclient-dsvm-functional
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/novaclient-dsvm-functional/run.yaml
+    post-run: playbooks/legacy/novaclient-dsvm-functional/post.yaml
+    timeout: 7200
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/nova
+      - openstack/python-novaclient
+
+- project:
+    check:
+      jobs:
+        - novaclient-dsvm-functional
+        - openstack-tox-lower-constraints
+    gate:
+      jobs:
+        - novaclient-dsvm-functional
+        - openstack-tox-lower-constraints
